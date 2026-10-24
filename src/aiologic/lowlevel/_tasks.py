@@ -195,6 +195,8 @@ async def _asyncio_shielded_call(wrapped, args, kwargs, /):
                 try:
                     result = await shield(future)
                 except CancelledError as e:
+                    if future.cancelled():
+                        raise
                     exc = e
                 else:
                     break
@@ -230,6 +232,8 @@ async def _asyncio_shielded_call(wrapped, args, kwargs, /):
                     try:
                         result = await shield(future)
                     except CancelledError as e:
+                        if future.cancelled():
+                            raise
                         exc = e
                     else:
                         break
